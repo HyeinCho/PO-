@@ -121,6 +121,15 @@ def check_filler(doc):
     m_doc = ''.join(list_filler)
     return m_doc, s_filler
 
+# 문서(원래 대본, STT 대본) 유사도 비교
+def compare_script(doc, original):
+    # 대본 형태소 분석
+    tok_doc = tokenizer.morphs(doc)
+    tok_original = tokenizer.morphs(original)
+    # 두 대본 유사도 비교
+    doc_similarity = model.docvecs.similarity_unseen_docs(model, tok_doc, tok_original)
+    
+    return doc_similarity
 
 # cosine_similarity
 def cos(doc, original):
@@ -185,8 +194,11 @@ stt_str, sec = audio_stt("Present_audio.wav")
 s_doc = put(stt_str)
 m_doc, doc_filler = check_filler(s_doc)
 doc = sentence_modify(m_doc)
+doc_similarity = compare_script(doc, original)
 speed = check_speed(doc, sec)
 
+print("Similarlity:", doc_similarity)
+print()
 print("your filler :", doc_filler)
 print()
 print("modify text :", doc)
