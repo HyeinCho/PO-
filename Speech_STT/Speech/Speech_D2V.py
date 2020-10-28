@@ -123,6 +123,9 @@ def check_filler(doc):
 
 # 문서(원래 대본, STT 대본) 유사도 비교
 def compare_script(doc, original):
+    tokenizer = Mecab()
+    model = gensim.models.Doc2Vec.load("/POresentation/Speech_STT/Speech/D2V/model/doc2vec.model")
+
     # 대본 형태소 분석
     tok_doc = tokenizer.morphs(doc)
     tok_original = tokenizer.morphs(original)
